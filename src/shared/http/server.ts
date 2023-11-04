@@ -3,6 +3,13 @@ import cors from "cors";
 import routes from "./routes";
 import AppError from "@shared/errors/AppError";
 
+/* Para poder lidar com o banco */
+import "reflect-metadata";
+
+/* vai chamar o createConnection e usar o arquivo ormconfig
+ * para se conectar*/
+import "@shared/typeorm";
+
 const app = express();
 
 app.use(cors());
