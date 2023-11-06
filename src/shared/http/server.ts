@@ -4,6 +4,7 @@ import express, { Request, NextFunction, Response } from "express";
  * da importacao do express senao ele da um erro de unhandled promise*/
 import "express-async-errors";
 import cors from "cors";
+import { errors } from "celebrate";
 import routes from "./routes";
 import AppError from "@shared/errors/AppError";
 
@@ -20,6 +21,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use(routes);
+
+/* para poder tratar os erros que serao gerados
+ * pelo celebrate na hora da validacao de dados */
+app.use(errors());
 
 // quando o erro é uma instacia do AppError, ou seja
 // algum erro de autenticacao ou similar
