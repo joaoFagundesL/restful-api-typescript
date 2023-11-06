@@ -28,7 +28,6 @@ class UpdateProductService {
     }
 
     /* Caso o nome do produto ja exista nao vai ser possivel atualizar */
-
     if (name === product.name) {
       throw new AppError("Product already exists");
     }

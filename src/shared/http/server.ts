@@ -1,4 +1,8 @@
 import express, { Request, NextFunction, Response } from "express";
+
+/* o express-async-errors teve que ser importado logo abaixo
+ * da importacao do express senao ele da um erro de unhandled promise*/
+import "express-async-errors";
 import cors from "cors";
 import routes from "./routes";
 import AppError from "@shared/errors/AppError";
@@ -15,6 +19,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use(routes);
+
 // quando o erro é uma instacia do AppError, ou seja
 // algum erro de autenticacao ou similar
 app.use(
@@ -26,6 +32,8 @@ app.use(
       });
     }
 
+    console.log(error);
+
     // senao é um erro desconhecido
     return response.status(500).json({
       status: "error",
@@ -34,8 +42,6 @@ app.use(
   },
 );
 
-app.use(routes);
-
 app.listen(3333, () => {
-  console.log("server started on port 333!");
+  console.log("server started on port 3333!");
 });
