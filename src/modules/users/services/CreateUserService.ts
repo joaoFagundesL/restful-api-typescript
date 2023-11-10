@@ -1,6 +1,6 @@
 import { getCustomRepository } from "typeorm";
 import AppError from "@shared/errors/AppError";
-import UserRepository from "../repositories/UserRepository";
+import UserRepository from "../typeorm/repositories/UserRepository";
 import User from "../typeorm/entities/User";
 
 interface UserRequest {

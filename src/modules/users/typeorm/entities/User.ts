@@ -1,4 +1,9 @@
-import { Column, PrimaryGeneratedColumn, Entity } from "typeorm";
+import {
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  Entity,
+} from "typeorm";
 
 @Entity("users")
 class User {
@@ -17,11 +22,11 @@ class User {
   @Column()
   avatar: string;
 
-  @Column()
-  created_at: string;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column()
-  updated_at: string;
+  @CreateDateColumn()
+  updated_at: Date;
 }
 
 export default User;

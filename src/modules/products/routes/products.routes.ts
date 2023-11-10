@@ -1,6 +1,5 @@
 import { Router } from "express";
 import ProductController from "../controllers/ProductController";
-
 /* Vai ser usado para fazer a validacao dos dados */
 import { celebrate, Joi, Segments } from "celebrate";
 
