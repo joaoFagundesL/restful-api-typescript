@@ -1,6 +1,6 @@
 import AppError from "@shared/errors/AppError";
 import { Response, Request, NextFunction } from "express";
-import { verify } from "jsonwebtoken";
+import { JwtPayload, verify } from "jsonwebtoken";
 import authConfig from "@config/auth";
 
 export default function isAuthenticated(
@@ -21,7 +21,19 @@ export default function isAuthenticated(
 
   try {
     /* verifica se o token informado foi criado a partir da secret da aplicacao */
-    const decodeToken = verify(token, authConfig.jwt.secret);
+    const { sub } = verify(token, authConfig.jwt.secret) as JwtPayload;
+
+    /* diz que sub é string | undefined e como eu defini em @types que user_id é um number eu preciso
+     * converter, e alem disso fazer a verificao para saber se é undefined pois senao da errado apenas a
+     * conversao string-number */
+
+    /* ao fazer essa criacao eu consigo usar esse id em toda a aplicacao para ter controle
+     * do id do usuario que autenticou com o token */
+    if (sub === undefined) {
+      throw new AppError("Invalid JWT Token");
+    }
+
+    req.user_id = parseInt(sub, 10);
 
     return next();
   } catch {
