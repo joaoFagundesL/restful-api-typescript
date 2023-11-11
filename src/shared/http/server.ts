@@ -7,6 +7,7 @@ import cors from "cors";
 import { errors } from "celebrate";
 import routes from "./routes";
 import AppError from "@shared/errors/AppError";
+import uploadConfig from "@config/upload";
 
 /* Para poder lidar com o banco */
 import "reflect-metadata";
@@ -16,10 +17,11 @@ import "reflect-metadata";
 import "@shared/typeorm";
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
+/* url para o front end que consumir as imagens  */
+app.use("/files", express.static(uploadConfig.directory));
 app.use(routes);
 
 /* para poder tratar os erros que serao gerados
