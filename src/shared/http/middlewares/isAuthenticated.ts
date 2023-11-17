@@ -20,7 +20,8 @@ export default function isAuthenticated(
   const [, token] = authHeader.split(" ");
 
   try {
-    /* verifica se o token informado foi criado a partir da secret da aplicacao */
+    /* verifica se o token informado foi criado a partir da secret da aplicacao e
+     * retorna o Payload, assim eu sei de quem é o id*/
     const { sub } = verify(token, authConfig.jwt.secret) as JwtPayload;
 
     /* diz que sub é string | undefined e como eu defini em @types que user_id é um number eu preciso

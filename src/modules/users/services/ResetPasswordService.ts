@@ -53,6 +53,9 @@ class ResetPasswordService {
 
     /* await pois o hash é um metodo assync */
     user.password = await hash(password, 8);
+
+    /* salvar no banco ja que a informacao da senha foi alterada */
+    await userRepository.save(user);
   }
 }
 
