@@ -1,4 +1,5 @@
 import { getCustomRepository } from "typeorm";
+import path from "path";
 import AppError from "@shared/errors/AppError";
 import UserRepository from "../typeorm/repositories/UserRepository";
 import UserTokenRepository from "../typeorm/repositories/UserTokenRepository";
@@ -22,6 +23,13 @@ class SendForgotPasswordEmailService {
 
     const { token } = await userTokenRepository.generate(user.id);
 
+    const forgotPasswordTemplate = path.resolve(
+      __dirname,
+      "..",
+      "views",
+      "forgot_password.hbs",
+    );
+
     /* o body do EtherealMail dizia que userToken poderia ser undefined ja que o metodo
      * generate poderia retornar uma promise do tipo undefined,  e para
      * nao ter que fazer um if eu removi o undefined da funcao generate
@@ -43,11 +51,13 @@ class SendForgotPasswordEmailService {
       templateData: {
         /* notacao {{}} é usada para variaveis que é possivel gracas ao handlebars que foi
          * importado */
-        template: `Ola {{name}}: {{token}} `,
+        file: forgotPasswordTemplate,
         variables: {
           name: user.name,
 
-          token /* posso passar assim pois o nome da prorpieda e o nome do valor */,
+          /* isso é tratado na aplicacao na frontend, é o link
+           * com o token */
+          link: `http://localhost:3000/reset_password?token=${token}`,
         },
       },
     });
