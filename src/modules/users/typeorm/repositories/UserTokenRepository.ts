@@ -13,7 +13,7 @@ class UserTokenRepository extends Repository<UserToken> {
     return userToken;
   }
 
-  public async generate(user_id: number): Promise<UserToken | undefined> {
+  public async generate(user_id: number): Promise<UserToken> {
     /* os campos de id e token sao gerados automaticamente, o que eu preciso é
      * apenas criar o user_id conforme o que for passado */
     const userToken = await this.create({

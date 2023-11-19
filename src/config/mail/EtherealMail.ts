@@ -1,13 +1,40 @@
 import nodemailer from "nodemailer";
+import HandlebarsMailTemplate from "./HandlebarsMailTemplate";
+
+interface IMailContact {
+  name: string;
+  email: string;
+}
 
 interface ISendMail {
-  to: string;
-  body: string;
+  /* o to/from vai ter a informacao do nome da pessoa e também do email */
+  to: IMailContact;
+  from?: IMailContact;
+  subject: string;
+  templateData: IParseMailTemplate;
+}
+
+/* sao as mesma interfaces definidas no arquivo HandlebarsMailService,
+ * ja que aqui eu vou enviar um template */
+interface ITemplateVariable {
+  [key: string]: string | number;
+}
+
+interface IParseMailTemplate {
+  template: string;
+  variables: ITemplateVariable;
 }
 
 export default class EtherealMail {
-  static async sendMail({ to, body }: ISendMail): Promise<void> {
+  static async sendMail({
+    to,
+    from,
+    subject,
+    templateData,
+  }: ISendMail): Promise<void> {
     const account = await nodemailer.createTestAccount();
+
+    const mailTemplate = new HandlebarsMailTemplate();
 
     const transporter = nodemailer.createTransport({
       host: account.smtp.host,
@@ -19,11 +46,23 @@ export default class EtherealMail {
       },
     });
 
+    /* as informacoes com o token eu recebo na classe SendForgot juntamente com o token */
     const message = await transporter.sendMail({
-      from: "equipe@apivendas.com",
-      to,
-      subject: "Recuperação de Senha",
-      text: body,
+      from: {
+        /* o address/name é um campo do nodemailer e nao da interface */
+        name: from?.name || "Equipe API vendas",
+        address: from?.email || "equipe@apivendas.com",
+      },
+
+      to: {
+        name: to.name,
+        address: to.email,
+      },
+
+      subject /* o subject é enviado por parametro */,
+
+      /* o metodo parse é assincrone */
+      html: await mailTemplate.parse(templateData),
     });
 
     console.log("Message sent: %s", message.messageId);

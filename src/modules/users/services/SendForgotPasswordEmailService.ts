@@ -20,18 +20,36 @@ class SendForgotPasswordEmailService {
       throw new AppError("user not found");
     }
 
-    const userToken = await userTokenRepository.generate(user.id);
+    const { token } = await userTokenRepository.generate(user.id);
 
-    /* o body do EtherealMail dizia que userToken poderia ser undefined */
-    if (userToken == undefined) {
-      throw new Error("userToken undefined");
-    }
+    /* o body do EtherealMail dizia que userToken poderia ser undefined ja que o metodo
+     * generate poderia retornar uma promise do tipo undefined,  e para
+     * nao ter que fazer um if eu removi o undefined da funcao generate
+     */
+
+    // if (token == undefined) {
+    //   throw new Error("userToken undefined");
+    // }
 
     // console.log(userToken);
-    //
+
     await EtherealMail.sendMail({
-      to: email,
-      body: `Token para recuperação de senha:  ${userToken.token} `,
+      to: {
+        email: user.email,
+        name: user.name,
+      },
+
+      subject: "[API VENDAS] Recuperacao de senha",
+      templateData: {
+        /* notacao {{}} é usada para variaveis que é possivel gracas ao handlebars que foi
+         * importado */
+        template: `Ola {{name}}: {{token}} `,
+        variables: {
+          name: user.name,
+
+          token /* posso passar assim pois o nome da prorpieda e o nome do valor */,
+        },
+      },
     });
   }
 }
