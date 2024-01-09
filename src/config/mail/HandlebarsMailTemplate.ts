@@ -11,7 +11,7 @@ import fs from "fs";
 };
  * */
 interface ITemplateVariable {
-  [key: string]: string | number;
+  [key]: string | number;
 }
 
 interface IParseMailTemplate {

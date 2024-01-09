@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class CreateUserTokens1699662239332 implements MigrationInterface {
+export class CreateCustomers1704827564816 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "user_tokens",
+        name: "customers",
         columns: [
           {
             name: "id",
@@ -15,13 +15,13 @@ export class CreateUserTokens1699662239332 implements MigrationInterface {
           },
 
           {
-            name: "token",
-            type: "uuid",
+            name: "name",
+            type: "varchar",
           },
 
           {
-            name: "user_id",
-            type: "int",
+            name: "email",
+            type: "varchar",
           },
 
           {
@@ -36,25 +36,11 @@ export class CreateUserTokens1699662239332 implements MigrationInterface {
             default: "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
           },
         ],
-
-        /* aparentemente isso é 1-n, pelo que testei */
-        foreignKeys: [
-          {
-            name: "TokenUser",
-            referencedTableName: "users",
-            referencedColumnNames: ["id"],
-            columnNames: ["user_id"],
-
-            /* se apagar o usuario o token tbm sera apagado */
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
-          },
-        ],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("user_tokens");
+    await queryRunner.dropTable("customers");
   }
 }
