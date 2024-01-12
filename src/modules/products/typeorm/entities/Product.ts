@@ -1,14 +1,21 @@
+import OrdersProducts from "@modules/orders/typeorm/entities/OrdersProducts";
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 
 @Entity("products")
 class Product {
   @PrimaryGeneratedColumn("increment")
   id: number;
+
+  /* Mesma coisa que o Order.ts */
+  @OneToMany(() => OrdersProducts, (order_products) => order_products.product)
+  order_products: OrdersProducts[];
 
   @Column()
   name: string;
@@ -22,7 +29,7 @@ class Product {
   @CreateDateColumn()
   created_at: Date;
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updated_at: Date;
 }
 

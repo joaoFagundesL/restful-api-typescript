@@ -8,6 +8,9 @@ import {
 /* aqui a migration vai apenas adicionar a fk customer_id na tabela orders. Foi feito
  * de forma separada criando outra migration */
 
+/* Ainda é preciso configurar depois o arquivo Order.ts com essa chave fk
+ * que foi criada */
+
 export class AddCustomerIdToOrders1705070614947 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
