@@ -50,11 +50,58 @@ class CreateOrderService {
     );
 
     /* array com todos os produtos que nao estao em productsExistIds */
-    if (productsExistIds.length) {
+    if (checkInexistentProducts.length) {
       throw new AppError(
         `could not find product ${checkInexistentProducts[0].id}`,
       );
     }
+
+    /* validar a quantidade em estoque. Pega o array que o usuario
+     * informou e filtra os products que foram encontrados pelo findAll. Caso algum
+     * produto do findAll tenha a quantidade em estoque menor que a quantidade que eu quero entao
+     * nao é possivel. Por exemplo, se em estoque tem 5 e eu quero 20, entao 5 < 20 nao é possivel
+     * */
+    const quantityAvailable = products.filter(
+      (product) =>
+        productsExist.filter((p) => p.id === product.id)[0].quantity <
+        product.quantity,
+    );
+
+    if (quantityAvailable.length) {
+      throw new AppError(
+        `quantity ${quantityAvailable[0].quantity} is not available`,
+      );
+    }
+
+    const serializedProducts = products.map((product) => ({
+      product_id: product.id,
+      quantity: product.quantity,
+
+      /* o price vem do array que foi utilizado no findAll,
+       * como os id's sao uniques vai retornar sempre um array de 1
+       * posicao entao posso pegar sempre na posicao [0] */
+      price: productsExist.filter((p) => p.id === product.id)[0].price,
+    }));
+
+    /* cria a order */
+    const order = await ordersRepository.createOrder({
+      customer: customerExists,
+      products: serializedProducts,
+    });
+
+    /* atualiza a quantidade */
+    const { order_products } = order;
+
+    const updatedQuantity = order_products.map((product) => ({
+      id: product.product_id,
+      quantity:
+        productsExist.filter((p) => p.id === product.product_id)[0].quantity -
+        product.quantity,
+    }));
+
+    await productsRepository.save(updatedQuantity);
+
+    return order;
   }
 }
 

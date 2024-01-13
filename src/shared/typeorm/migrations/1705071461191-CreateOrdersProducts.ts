@@ -17,6 +17,16 @@ export class CreateOrdersProducts1705071461191 implements MigrationInterface {
             isPrimary: true,
             generationStrategy: "increment",
           },
+          {
+            name: "price",
+            type: "decimal",
+            precision: 10,
+            scale: 2,
+          },
+          {
+            name: "quantity",
+            type: "int",
+          },
 
           {
             name: "created_at",

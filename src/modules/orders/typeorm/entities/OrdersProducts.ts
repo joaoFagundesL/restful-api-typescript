@@ -24,11 +24,16 @@ class OrdersProducts {
   @JoinColumn({ name: "order_id" })
   order: Order;
 
-@ManyToOne(() => Product, (product) => product.)
+  @ManyToOne(() => Product, (product) => product.order_products)
   @JoinColumn({ name: "product_id" })
   product: Product;
 
+  /* é preciso colocar os campos que sao chave fk */
+  @Column()
+  order_id: number;
 
+  @Column()
+  product_id: number;
 
   @Column("decimal")
   price: number;
