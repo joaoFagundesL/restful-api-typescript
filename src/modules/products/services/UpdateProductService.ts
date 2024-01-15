@@ -2,6 +2,7 @@ import { getCustomRepository } from "typeorm";
 import { ProductRepository } from "../typeorm/repositories/ProductRepository";
 import AppError from "@shared/errors/AppError";
 import Product from "../typeorm/entities/Product";
+import RedisCache from "@shared/cache/RedisCache";
 
 interface ProductRequest {
   id: number;
@@ -31,6 +32,13 @@ class UpdateProductService {
     if (name === product.name) {
       throw new AppError("Product already exists");
     }
+
+    const redisCache = new RedisCache();
+
+    /* invalidar o cache do redis, assim a quando altera alguma coisa
+     * a primeira consulta sera feita no banco e depois no redis, caso nao seja invalidado
+     * ele nao vai saber que alterou alguma coisa e o cache vai se manter sempre o mesmo*/
+    await redisCache.invalidate("api-vendas-PRODUCT_LIST");
 
     /* Caso esteja tudo certo pode atualizar os dados */
     product.name = name;

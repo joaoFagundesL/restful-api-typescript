@@ -3,7 +3,7 @@ import AppError from "@shared/errors/AppError";
 import UserRepository from "../typeorm/repositories/UserRepository";
 import User from "../typeorm/entities/User";
 import { compare, hash } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+import { Secret, sign } from "jsonwebtoken";
 import authConfig from "@config/auth";
 
 interface UserRequest {
@@ -43,7 +43,7 @@ class CreateSessionService {
 
     /* authConfig é o que eu exportei em config/auth assim fica de uso global, mas poderia ter
      * usado a secret direto aqui */
-    const token = sign({}, authConfig.jwt.secret, {
+    const token = sign({}, authConfig.jwt.secret as Secret, {
       subject: String(
         user.id,
       ) /* como user.id é um number foi preciso converter para nao dar erro */,

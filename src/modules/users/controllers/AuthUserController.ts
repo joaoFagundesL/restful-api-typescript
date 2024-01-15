@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import CreateSessionService from "../services/CreateSessionService";
+import { instanceToInstance } from "class-transformer";
 
 class AuthUserController {
   public async handle(req: Request, res: Response): Promise<Response> {
@@ -11,7 +12,7 @@ class AuthUserController {
      * o metodo que vai autenticar para dizer se o email e senhas estao certos */
     const auth = await authUserService.execute({ email, password });
 
-    return res.json(auth);
+    return res.json(instanceToInstance(auth));
   }
 }
 

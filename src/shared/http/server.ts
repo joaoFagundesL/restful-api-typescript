@@ -11,11 +11,13 @@ import uploadConfig from "@config/upload";
 
 /* Para poder lidar com o banco */
 import "reflect-metadata";
+import "dotenv/config";
 
 /* vai chamar o createConnection e usar o arquivo ormconfig
  * para se conectar*/
 import "@shared/typeorm";
 
+console.log(process.env.APP_SECRET);
 const app = express();
 app.use(cors());
 app.use(express.json());
