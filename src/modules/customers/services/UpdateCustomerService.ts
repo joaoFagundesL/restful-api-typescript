@@ -1,7 +1,7 @@
-import { getCustomRepository } from "typeorm";
 import AppError from "@shared/errors/AppError";
-import Customer from "../infra/typeorm/entities/Customer";
-import CustomerRepository from "../infra/typeorm/repositories/CustomerRepository";
+import { ICustomerRepository } from "../domain/repositories/ICustomerRepository";
+import { injectable, inject } from "tsyringe";
+import { ICustomer } from "../domain/model/ICustomer";
 
 interface IRequest {
   id: number;
@@ -9,11 +9,15 @@ interface IRequest {
   email: string;
 }
 
+@injectable()
 class UpdateCustomerService {
-  public async execute({ id, name, email }: IRequest): Promise<Customer> {
-    const customerRepository = getCustomRepository(CustomerRepository);
+  constructor(
+    @inject("CustomerRepository")
+    private customerRepository: ICustomerRepository,
+  ) {}
 
-    const customer = await customerRepository.findById(id);
+  public async execute({ id, name, email }: IRequest): Promise<ICustomer> {
+    const customer = await this.customerRepository.findById(id);
 
     if (!customer) {
       throw new AppError("user not found!");
@@ -22,7 +26,7 @@ class UpdateCustomerService {
     /* nao pode atualizar o email se o mesmo ja estiver em uso,
      * porem se eu buscar o usuario pelo email vai retornar o email proprio
      * dele */
-    const userUpdateEmail = await customerRepository.findByEmail(email);
+    const userUpdateEmail = await this.customerRepository.findByEmail(email);
 
     /* aqui eu faco entao a verificacao para descartar o email do usuario, ja
      * que pode retornar o email que ele esta usando */
@@ -36,7 +40,7 @@ class UpdateCustomerService {
     customer.name = name;
     customer.email = email;
 
-    await customerRepository.save(customer);
+    await this.customerRepository.save(customer);
 
     return customer;
   }

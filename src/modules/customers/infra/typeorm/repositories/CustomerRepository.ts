@@ -1,10 +1,41 @@
-import { EntityRepository, Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import Customer from "../entities/Customer";
+import { ICustomerRepository } from "@modules/customers/domain/repositories/ICustomerRepository";
+import { ICreateCustomer } from "@modules/customers/domain/model/ICreateCustomer";
 
-@EntityRepository(Customer)
-class customerRepository extends Repository<Customer> {
+class CustomerRepository implements ICustomerRepository {
+  private ormRepository: Repository<Customer>;
+
+  constructor() {
+    this.ormRepository = getRepository(Customer);
+  }
+
+  public async remove(customer: Customer): Promise<Customer> {
+    await this.ormRepository.remove(customer);
+
+    return customer;
+  }
+
+  public async find(): Promise<Customer[]> {
+    return await this.ormRepository.find();
+  }
+
+  public async create({ name, email }: ICreateCustomer): Promise<Customer> {
+    const customer = this.ormRepository.create({ name, email });
+
+    await this.ormRepository.save(customer);
+
+    return customer;
+  }
+
+  public async save(customer: Customer): Promise<Customer> {
+    await this.ormRepository.save(customer);
+
+    return customer;
+  }
+
   public async findByName(name: string): Promise<Customer | undefined> {
-    const customer = await this.findOne({
+    const customer = await this.ormRepository.findOne({
       where: {
         name,
       },
@@ -14,7 +45,7 @@ class customerRepository extends Repository<Customer> {
   }
 
   public async findById(id: number): Promise<Customer | undefined> {
-    const customer = await this.findOne({
+    const customer = await this.ormRepository.findOne({
       where: {
         id,
       },
@@ -24,7 +55,7 @@ class customerRepository extends Repository<Customer> {
   }
 
   public async findByEmail(email: string): Promise<Customer | undefined> {
-    const customer = await this.findOne({
+    const customer = await this.ormRepository.findOne({
       where: {
         email,
       },
@@ -34,4 +65,4 @@ class customerRepository extends Repository<Customer> {
   }
 }
 
-export default customerRepository;
+export default CustomerRepository;

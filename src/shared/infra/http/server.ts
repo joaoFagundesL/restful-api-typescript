@@ -17,6 +17,7 @@ import "dotenv/config";
 /* vai chamar o createConnection e usar o arquivo ormconfig
  * para se conectar*/
 import "@shared/infra/typeorm";
+import "@shared/container";
 
 console.log(process.env.APP_SECRET);
 const app = express();

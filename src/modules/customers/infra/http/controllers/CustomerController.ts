@@ -4,10 +4,11 @@ import ShowCustomerService from "@modules/customers/services/ShowCustomerService
 import CreateCustomerService from "@modules/customers/services/CreateCustomerService";
 import UpdateCustomerService from "@modules/customers/services/UpdateCustomerService";
 import DeleteCustomerService from "@modules/customers/services/DeleteCustomerService";
+import { container } from "tsyringe";
 
 export default class CustomerController {
   public async index(req: Request, res: Response): Promise<Response> {
-    const listCustomers = new ListCustomerService();
+    const listCustomers = container.resolve(ListCustomerService);
 
     const customers = await listCustomers.execute();
 
@@ -21,7 +22,7 @@ export default class CustomerController {
       throw new Error("undefined id");
     }
 
-    const showCustomer = new ShowCustomerService();
+    const showCustomer = container.resolve(ShowCustomerService);
 
     const customer = await showCustomer.execute({ id });
 
@@ -31,7 +32,13 @@ export default class CustomerController {
   public async create(req: Request, res: Response): Promise<Response> {
     const { name, email } = req.body;
 
-    const createCustomer = new CreateCustomerService();
+    /* para evitar esses new toda hora é feito uma injecao
+     * de dependencia que é configurada no arquivo container/index.ts e no
+     * CreateCustomerService */
+    // const customerRepository = new CustomerRepository();
+    // const createCustomer = new CreateCustomerService(customerRepository);
+
+    const createCustomer = container.resolve(CreateCustomerService);
 
     const customer = await createCustomer.execute({ name, email });
 
@@ -55,7 +62,7 @@ export default class CustomerController {
       throw new Error("undefined id");
     }
 
-    const deleteCustomer = new DeleteCustomerService();
+    const deleteCustomer = container.resolve(DeleteCustomerService);
 
     await deleteCustomer.execute({ id });
 
