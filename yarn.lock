@@ -1250,6 +1250,11 @@ range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
+rate-limiter-flexible@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/rate-limiter-flexible/-/rate-limiter-flexible-4.0.0.tgz#4754706216f0b442e7527b1367e42b7682145010"
+  integrity sha512-SkA18LEPqJJKHixi6E7tzBKTXbj9gu5wPyfTykPVRZR5JGSw0dMCjtZsjlfuabVY940pu28Wu87NZN4FhztnyQ==
+
 raw-body@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.5.1.tgz#fe1b1628b181b700215e5fd42389f98b71392857"
@@ -1293,7 +1298,7 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
-redis@*:
+redis@*, redis@^4.0.0:
   version "4.6.12"
   resolved "https://registry.yarnpkg.com/redis/-/redis-4.6.12.tgz#b607c93e9b0dd09e641f837092e9a68cc6ac6570"
   integrity sha512-41Xuuko6P4uH4VPe5nE3BqXHB7a9lkFL0J29AlxKaIfD6eWO8VO/5PDF9ad2oS+mswMsfFxaM5DlE3tnXT+P8Q==

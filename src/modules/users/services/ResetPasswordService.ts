@@ -1,8 +1,8 @@
 import { getCustomRepository } from "typeorm";
 import AppError from "@shared/errors/AppError";
 import { isAfter, addHours } from "date-fns";
-import UserRepository from "../typeorm/repositories/UserRepository";
-import UserTokenRepository from "../typeorm/repositories/UserTokenRepository";
+import UserRepository from "../infra/typeorm/repositories/UserRepository";
+import UserTokenRepository from "../infra/typeorm/repositories/UserTokenRepository";
 import { hash } from "bcryptjs";
 
 interface UserRequest {

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/http/server.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "license": "MIT",
@@ -37,6 +37,8 @@
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
     "nodemailer": "^6.9.7",
+    "rate-limiter-flexible": "^4.0.0",
+    "redis": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.29",
     "uuid": "^9.0.1"

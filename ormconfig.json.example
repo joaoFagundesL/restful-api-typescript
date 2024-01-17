@@ -1,0 +1,15 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "juca",
+  "password": "hack09exe",
+  "database": "apivendas",
+  "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
+  "migrations": [ 
+    "./src/shared/infra/typeorm/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "./src/shared/infra/typeorm/migrations/"
+  }
+}
